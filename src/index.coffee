@@ -29,9 +29,10 @@ module.exports = ( env, callback ) ->
                 delete opts[optName]
                 env.logger.error("error evaluating #{optName} option for the #{name} markdown-it plugin: #{err}")
           md.use require(name), opts or {}
-      md.use require('./highlight'), 
-        classPrefix: highlight_settings["class-prefix"] or '',
-        autoLanguage: highlight_settings["auto-language"] or false
+      if highlight_settings.enabled is undefined or highlight_settings.enabled is true
+        md.use require('./highlight'),
+          classPrefix: highlight_settings["class-prefix"] or '',
+          autoLanguage: highlight_settings["auto-language"] or false
       md.use require('./resolve_links')(this, base)
       md.use require('./resolve_images')(this, base)
       md.render @markdown
